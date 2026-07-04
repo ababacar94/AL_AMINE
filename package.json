@@ -1,0 +1,25 @@
+{
+  "name": "alamine_fact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "live-server frontend",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ababacar94/AL_AMINE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ababacar94/AL_AMINE/issues"
+  },
+  "homepage": "https://github.com/ababacar94/AL_AMINE#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
