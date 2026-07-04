@@ -1,0 +1,78 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:ART-{####}",
+ "creation": "2026-06-22 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "type_article",
+  "code_barre",
+  "column_break_1",
+  "prix_unitaire",
+  "quantite_stock",
+  "seuil_alerte"
+ ],
+ "fields": [
+  {
+   "fieldname": "type_article",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Type d'Article",
+   "options": "Monture\nVerre\nLentille\nAccessoire",
+   "reqd": 1
+  },
+  {
+   "fieldname": "code_barre",
+   "fieldtype": "Data",
+   "label": "Code Barre"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "prix_unitaire",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Prix Unitaire",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantite_stock",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantit\u00e9 en Stock",
+   "reqd": 1
+  },
+  {
+   "fieldname": "seuil_alerte",
+   "fieldtype": "Int",
+   "label": "Seuil d'Alerte"
+  }
+ ],
+ "modified": "2026-06-22 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Alamine Fact",
+ "name": "Article Optique",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

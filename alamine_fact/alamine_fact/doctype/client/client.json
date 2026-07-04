@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:CLI-{####}",
+ "creation": "2026-06-22 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "informations_personnelles_section",
+  "nom_complet",
+  "telephone",
+  "email",
+  "column_break_1",
+  "adresse",
+  "date_de_naissance"
+ ],
+ "fields": [
+  {
+   "fieldname": "informations_personnelles_section",
+   "fieldtype": "Section Break",
+   "label": "Informations Personnelles"
+  },
+  {
+   "fieldname": "nom_complet",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nom Complet",
+   "reqd": 1
+  },
+  {
+   "fieldname": "telephone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "T\u00e9l\u00e9phone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "adresse",
+   "fieldtype": "Small Text",
+   "label": "Adresse"
+  },
+  {
+   "fieldname": "date_de_naissance",
+   "fieldtype": "Date",
+   "label": "Date de Naissance"
+  }
+ ],
+ "modified": "2026-06-22 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Alamine Fact",
+ "name": "Client",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

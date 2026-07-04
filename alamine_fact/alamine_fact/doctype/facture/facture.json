@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:FACT-{####}",
+ "creation": "2026-06-22 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "client",
+  "date_facture",
+  "column_break_1",
+  "statut_paiement",
+  "methode_paiement",
+  "articles_section",
+  "lignes_articles",
+  "totaux_section",
+  "montant_total"
+ ],
+ "fields": [
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client",
+   "options": "Client",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "date_facture",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date de Facture",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Non pay\u00e9",
+   "fieldname": "statut_paiement",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Statut de Paiement",
+   "options": "Non pay\u00e9\nPartiel\nPay\u00e9"
+  },
+  {
+   "fieldname": "methode_paiement",
+   "fieldtype": "Select",
+   "label": "M\u00e9thode de Paiement",
+   "options": "\nEsp\u00e8ces\nCarte Bancaire\nMobile Money"
+  },
+  {
+   "fieldname": "articles_section",
+   "fieldtype": "Section Break",
+   "label": "Articles Vendus"
+  },
+  {
+   "fieldname": "lignes_articles",
+   "fieldtype": "Table",
+   "label": "Lignes",
+   "options": "Ligne Facture",
+   "reqd": 1
+  },
+  {
+   "fieldname": "totaux_section",
+   "fieldtype": "Section Break",
+   "label": "Totaux"
+  },
+  {
+   "fieldname": "montant_total",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Montant Total",
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 1,
+ "modified": "2026-06-22 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Alamine Fact",
+ "name": "Facture",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

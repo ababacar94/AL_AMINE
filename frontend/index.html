@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alamine Fact - ERP Premium</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icônes Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar (Menu hamburger sur mobile via CSS/JS) -->
+        <button id="mobile-menu-btn" class="mobile-menu-btn"><i data-lucide="menu"></i></button>
+        
+        <aside class="sidebar glass-panel" id="sidebar">
+            <div class="logo-container">
+                <i data-lucide="glasses" class="logo-icon"></i>
+                <h1 class="logo-text">Alamine<span>Fact</span></h1>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard" data-title="Tableau de bord">
+                    <i data-lucide="home"></i><span>Tableau de bord</span>
+                </a>
+                <a href="#" class="nav-item" data-view="invoices" data-title="Factures & Devis">
+                    <i data-lucide="dollar-sign"></i><span>Factures & Devis</span>
+                </a>
+                <a href="#" class="nav-item" data-view="sales" data-title="Nouvelle Vente">
+                    <i data-lucide="shopping-cart"></i><span>Nouvelle Vente</span>
+                </a>
+                <a href="#" class="nav-item" data-view="clients" data-title="Clients">
+                    <i data-lucide="users"></i><span>Clients</span>
+                </a>
+                <a href="#" class="nav-item" data-view="prescriptions" data-title="Prescriptions">
+                    <i data-lucide="eye"></i><span>Prescriptions</span>
+                </a>
+                <a href="#" class="nav-item" data-view="agenda" data-title="Rendez-vous">
+                    <i data-lucide="calendar"></i><span>Rendez-vous</span>
+                </a>
+                <a href="#" class="nav-item" data-view="stock" data-title="Stock Optique">
+                    <i data-lucide="package"></i><span>Stock Optique</span>
+                </a>
+                <a href="#" class="nav-item" data-view="workshop" data-title="Atelier">
+                    <i data-lucide="factory"></i><span>Atelier</span>
+                </a>
+                <a href="#" class="nav-item" data-view="suppliers" data-title="Fournisseurs">
+                    <i data-lucide="truck"></i><span>Fournisseurs</span>
+                </a>
+                <a href="#" class="nav-item" data-view="reports" data-title="Rapports">
+                    <i data-lucide="bar-chart-2"></i><span>Rapports</span>
+                </a>
+                <a href="#" class="nav-item" data-view="settings" data-title="Paramètres">
+                    <i data-lucide="settings"></i><span>Paramètres</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header glass-panel">
+                <div class="breadcrumb" id="breadcrumb">
+                    <i data-lucide="home"></i> <span>Tableau de bord</span>
+                </div>
+                <div class="global-search">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Rechercher un client, une facture ou une prescription...">
+                </div>
+                <div class="header-actions">
+                    <div class="lang-selector">
+                        <span>FR</span> <i data-lucide="chevron-down"></i>
+                    </div>
+                    <button class="icon-btn"><i data-lucide="bell"></i><span class="badge">3</span></button>
+                    <div class="profile-menu">
+                        <img src="https://ui-avatars.com/api/?name=A&background=3B82F6&color=fff" alt="User" class="avatar">
+                        <div class="profile-info">
+                            <span class="name">Administrateur</span>
+                            <span class="role">Boutique</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="view-container" class="view-container">
+                <!-- Vue injectée ici -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Templates pour JS -->
+    
+    <!-- DASHBOARD V2 -->
+    <template id="tpl-dashboard">
+        <div class="dashboard-view animate-fade-in">
+            <div class="stats-grid">
+                <!-- Carte 1 -->
+                <div class="stat-card glass-panel accent-primary">
+                    <div class="stat-icon"><i data-lucide="eye"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-label">Prescriptions du jour</span>
+                        <h3 class="stat-value">24</h3>
+                        <span class="stat-trend positive">+8% cette semaine</span>
+                    </div>
+                </div>
+                <!-- Carte 2 -->
+                <div class="stat-card glass-panel accent-success">
+                    <div class="stat-icon"><i data-lucide="dollar-sign"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-label">Bénéfice Net</span>
+                        <h3 class="stat-value">450 000 FCFA</h3>
+                        <span class="stat-trend positive">+15% ce mois</span>
+                    </div>
+                </div>
+                <!-- Carte 3 -->
+                <div class="stat-card glass-panel accent-warning">
+                    <div class="stat-icon"><i data-lucide="factory"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-label">Atelier</span>
+                        <div style="font-size: 0.85rem; margin-top: 5px; color: var(--text-main);">
+                            En cours: <b>14</b> | Prêtes: <b>8</b> | Attente: <b>3</b>
+                        </div>
+                    </div>
+                </div>
+                <!-- Carte 4 -->
+                <div class="stat-card glass-panel accent-danger">
+                    <div class="stat-icon"><i data-lucide="package-minus"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-label">Stock Faible</span>
+                        <div style="font-size: 0.8rem; margin-top: 5px;">
+                            <span style="color: var(--accent-danger)">🔴 5 Montures</span><br>
+                            <span style="color: var(--accent-warning)">🟠 4 Verres pro</span><br>
+                            <span style="color: var(--accent-success)">🟡 3 Lentilles</span>
+                        </div>
+                        <button class="btn-text" style="font-size: 0.75rem; margin-top: 5px; text-align: left; padding:0;">Voir le détail</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphiques -->
+            <div class="charts-grid mt-4">
+                <div class="glass-panel p-4" style="grid-column: span 2;">
+                    <h3 class="chart-title">Évolution du chiffre d'affaires</h3>
+                    <div style="height: 300px;"><canvas id="revenueChart"></canvas></div>
+                </div>
+                <div class="glass-panel p-4">
+                    <h3 class="chart-title">Produits les plus vendus</h3>
+                    <div style="height: 300px; display: flex; justify-content: center;"><canvas id="productsChart"></canvas></div>
+                </div>
+                <div class="glass-panel p-4" style="grid-column: span 3;">
+                    <h3 class="chart-title">Évolution des bénéfices</h3>
+                    <div style="height: 250px;"><canvas id="profitChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- VIEWS EXISTANTES RÉENCODÉES (Factures, etc.) -->
+    
+    <template id="tpl-invoices">
+        <div class="invoices-view animate-fade-in">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2 style="font-size: 1.5rem; font-weight: 600; color: var(--text-main);">Factures & Devis</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Gérez l'historique de vos facturations et encaissements.</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn-outline-sm" style="display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--accent-primary); color: var(--accent-primary); background: transparent; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer;">
+                        <i data-lucide="file-plus" style="width: 18px;"></i> Devis Manuel
+                    </button>
+                    <button class="btn-primary" onclick="window.appRenderView('sales', 'Nouvelle Vente')" style="display: flex; align-items: center; gap: 0.5rem; background: var(--accent-secondary); border: none; color: white; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer; font-weight: 500;">
+                        <i data-lucide="plus" style="width: 18px;"></i> Nouvelle Vente
+                    </button>
+                </div>
+            </header>
+
+            <div class="glass-panel" style="padding: 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                <div class="global-search" style="flex-grow: 1; min-width: 300px; width: auto; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass);">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Chercher par N° ou Client..." style="background: transparent; border: none; color: white; outline: none; padding:0;">
+                </div>
+                <select style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: var(--text-main); padding: 0.6rem 1rem; border-radius: 6px; outline: none;">
+                    <option>Tous les statuts</option>
+                    <option>Payé</option>
+                    <option>Acompte</option>
+                    <option>Impayé</option>
+                </select>
+                <input type="date" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: var(--text-main); padding: 0.5rem 1rem; border-radius: 6px; outline: none; color-scheme: dark;">
+            </div>
+
+            <div class="glass-panel" style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-glass);">
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">N° Document</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Date</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Client</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Total</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Statut</th>
+                            <th style="padding: 1rem; text-align: right; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem; font-weight: 600; color: var(--accent-secondary);">#FACT-26001</td>
+                            <td style="padding: 1rem; font-size: 0.9rem;">22 Juin 2026</td>
+                            <td style="padding: 1rem; font-weight: 500;">Mamadou Diop</td>
+                            <td style="padding: 1rem; font-weight: 600;">120 000 FCFA</td>
+                            <td style="padding: 1rem;"><span class="badge" style="position: static; padding: 4px 10px; background: rgba(16, 185, 129, 0.15); color: var(--accent-success);">Payé</span></td>
+                            <td style="padding: 1rem; text-align: right;">
+                                <button class="icon-btn" title="Imprimer"><i data-lucide="printer" style="width: 18px;"></i></button>
+                                <button class="icon-btn" title="Options"><i data-lucide="more-vertical" style="width: 18px;"></i></button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem; font-weight: 600; color: var(--accent-secondary);">#FACT-26002</td>
+                            <td style="padding: 1rem; font-size: 0.9rem;">21 Juin 2026</td>
+                            <td style="padding: 1rem; font-weight: 500;">Aissatou Sow</td>
+                            <td style="padding: 1rem; font-weight: 600;">45 000 FCFA</td>
+                            <td style="padding: 1rem;"><span class="badge" style="position: static; padding: 4px 10px; background: rgba(245, 158, 11, 0.15); color: var(--accent-warning);">Acompte</span></td>
+                            <td style="padding: 1rem; text-align: right;">
+                                <button class="icon-btn" style="color: var(--accent-secondary);" title="Ajouter Paiement"><i data-lucide="dollar-sign" style="width: 18px;"></i></button>
+                                <button class="icon-btn" title="Imprimer"><i data-lucide="printer" style="width: 18px;"></i></button>
+                            </td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem; font-weight: 600; color: var(--accent-primary);">#DEV-0084</td>
+                            <td style="padding: 1rem; font-size: 0.9rem;">20 Juin 2026</td>
+                            <td style="padding: 1rem; font-weight: 500;">Omar Fall</td>
+                            <td style="padding: 1rem; font-weight: 600;">85 000 FCFA</td>
+                            <td style="padding: 1rem;"><span class="badge" style="position: static; padding: 4px 10px; background: rgba(255, 255, 255, 0.1); color: var(--text-muted);">Devis</span></td>
+                            <td style="padding: 1rem; text-align: right;">
+                                <button class="icon-btn" style="color: var(--accent-success);" title="Convertir en Facture"><i data-lucide="check-circle" style="width: 18px;"></i></button>
+                                <button class="icon-btn" title="Imprimer"><i data-lucide="printer" style="width: 18px;"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+    <template id="tpl-workshop">
+        <div class="animate-fade-in"><h2 class="view-header">Atelier Kanban</h2><p>Sera remplacé par le Drag & Drop à la Phase 4...</p></div>
+    </template>
+
+    <template id="tpl-prescriptions">
+        <div class="prescriptions-view animate-fade-in">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2 style="font-size: 1.5rem; font-weight: 600; color: var(--text-main);">Dossier Médical & Prescriptions</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Gérez les corrections optiques et les ordonnances clients.</p>
+                </div>
+                <button class="btn-primary" style="display: flex; align-items: center; gap: 0.5rem; background: var(--accent-secondary); border: none; color: white; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer; font-weight: 500;">
+                    <i data-lucide="plus" style="width: 18px;"></i> Nouvelle Ordonnance
+                </button>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                <!-- Formulaire de saisie -->
+                <div class="glass-panel p-4" style="grid-column: span 2;">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--accent-primary); border-bottom: 1px solid var(--border-glass); padding-bottom: 0.5rem;">Saisie d'une Nouvelle Prescription</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                        <div class="input-group">
+                            <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Client</label>
+                            <select style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;">
+                                <option>Mamadou Diop</option>
+                                <option>Aissatou Sow</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Médecin Prescripteur</label>
+                            <input type="text" placeholder="Dr. Fall..." style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;">
+                        </div>
+                        <div class="input-group">
+                            <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Date de prescription</label>
+                            <input type="date" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; color-scheme: dark; outline:none;">
+                        </div>
+                        <div class="input-group">
+                            <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Écart Pupillaire (EP)</label>
+                            <input type="text" placeholder="Ex: 62mm" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <!-- Oeil Droit -->
+                        <div style="background: rgba(59, 130, 246, 0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(59, 130, 246, 0.2);">
+                            <h4 style="color: var(--accent-secondary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="eye" style="width: 18px;"></i> Œil Droit (OD)</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Sphère (SPH)</label><input type="text" placeholder="+0.00" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Cylindre (CYL)</label><input type="text" placeholder="-0.00" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Axe</label><input type="text" placeholder="180°" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Addition (ADD)</label><input type="text" placeholder="+2.00" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Oeil Gauche -->
+                        <div style="background: rgba(16, 185, 129, 0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2);">
+                            <h4 style="color: var(--accent-success); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="eye" style="width: 18px;"></i> Œil Gauche (OG)</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Sphère (SPH)</label><input type="text" placeholder="+0.00" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Cylindre (CYL)</label><input type="text" placeholder="-0.00" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Axe</label><input type="text" placeholder="180°" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                                <div><label style="font-size:0.8rem; color:var(--text-muted);">Addition (ADD)</label><input type="text" placeholder="+2.00" style="width:100%; padding:0.5rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); color:white; border-radius:4px; text-align:center; outline:none;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; display: flex; gap: 1rem; align-items: flex-end;">
+                        <div style="flex-grow: 1;">
+                            <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Observations</label>
+                            <input type="text" placeholder="Verres progressifs, antireflet..." style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;">
+                        </div>
+                        <button class="btn-primary" style="background: var(--accent-primary); border: none; color: white; padding: 0.75rem 2rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historique -->
+            <div class="glass-panel p-4">
+                <h3 style="margin-bottom: 1rem; color: var(--text-main);">Dernières Prescriptions</h3>
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border-glass);">
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Date</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Client</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Médecin</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Résumé OD</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Résumé OG</th>
+                            <th style="padding: 1rem; text-align: right; color: var(--text-muted); font-weight: 500; font-size: 0.85rem;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 1rem; font-size: 0.9rem;">20 Juin 2026</td>
+                            <td style="padding: 1rem; font-weight: 600; color: var(--accent-secondary);">Mamadou Diop</td>
+                            <td style="padding: 1rem; font-size: 0.9rem;">Dr. Sow</td>
+                            <td style="padding: 1rem; font-family: monospace; font-size: 0.85rem;">-1.50 (180)</td>
+                            <td style="padding: 1rem; font-family: monospace; font-size: 0.85rem;">-1.25 (175)</td>
+                            <td style="padding: 1rem; text-align: right;">
+                                <button class="icon-btn" title="Imprimer PDF"><i data-lucide="printer" style="width: 18px;"></i></button>
+                                <button class="icon-btn" title="Convertir en Devis"><i data-lucide="shopping-cart" style="width: 18px; color: var(--accent-success);"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-agenda">
+        <div class="agenda-view animate-fade-in" style="display: flex; flex-direction: column; height: 100%;">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-shrink: 0;">
+                <div>
+                    <h2 style="font-size: 1.5rem; font-weight: 600; color: var(--text-main);">Agenda & Rendez-vous</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Planification des visites et rappels automatiques.</p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="display: flex; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; overflow: hidden;">
+                        <button style="padding: 0.5rem 1rem; background: var(--accent-primary); color: white; border: none; font-weight: 500; cursor: pointer;">Semaine</button>
+                        <button style="padding: 0.5rem 1rem; background: transparent; color: var(--text-muted); border: none; font-weight: 500; cursor: pointer;">Mois</button>
+                    </div>
+                </div>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 350px 1fr; gap: 1.5rem; flex-grow: 1; min-height: 0;">
+                
+                <!-- Colonne de gauche : Formulaire + Prochains RDV -->
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; padding-right: 0.5rem;">
+                    
+                    <!-- Formulaire Nouveau RDV -->
+                    <div class="glass-panel p-4">
+                        <h3 style="margin-bottom: 1rem; color: var(--accent-secondary); font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i data-lucide="plus-circle" style="width: 18px;"></i> Planifier un RDV
+                        </h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div class="input-group">
+                                <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Client</label>
+                                <input type="text" placeholder="Rechercher client..." style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="input-group">
+                                    <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Date</label>
+                                    <input type="date" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; color-scheme: dark; outline:none;">
+                                </div>
+                                <div class="input-group">
+                                    <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Heure</label>
+                                    <input type="time" style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; color-scheme: dark; outline:none;">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Motif</label>
+                                <select style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;">
+                                    <option>Consultation (Examen de vue)</option>
+                                    <option>Choix de monture</option>
+                                    <option>Livraison / Essayage</option>
+                                    <option>SAV / Ajustement</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.5rem; display:block;">Notes</label>
+                                <textarea rows="2" placeholder="Précisions..." style="width: 100%; padding: 0.75rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; outline:none;"></textarea>
+                            </div>
+                            
+                            <!-- Notifications Toggles -->
+                            <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-main); font-size: 0.85rem; cursor: pointer;">
+                                    <input type="checkbox" checked> <i data-lucide="message-square" style="width: 16px; color: var(--accent-success);"></i> SMS
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-main); font-size: 0.85rem; cursor: pointer;">
+                                    <input type="checkbox" checked> <i data-lucide="smartphone" style="width: 16px; color: #25D366;"></i> WhatsApp
+                                </label>
+                            </div>
+
+                            <button class="btn-primary" style="background: var(--accent-secondary); border: none; color: white; padding: 0.8rem; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; margin-top: 0.5rem;">Confirmer le RDV</button>
+                        </div>
+                    </div>
+
+                    <!-- Prochains RDV List -->
+                    <div class="glass-panel p-4">
+                        <h3 style="margin-bottom: 1rem; color: var(--text-main); font-size: 1.1rem;">Aujourd'hui</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Item 1 -->
+                            <div style="background: rgba(139, 92, 246, 0.1); border-left: 3px solid var(--accent-primary); padding: 0.75rem; border-radius: 4px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                                    <span style="font-weight: 600; font-size: 0.95rem;">10:00 - 10:30</span>
+                                    <span class="badge" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-primary); padding: 2px 6px; font-size: 0.7rem; border-radius: 4px;">Examen</span>
+                                </div>
+                                <div style="font-size: 0.9rem; color: var(--text-main);">Fatou Ndiaye</div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid var(--accent-success); padding: 0.75rem; border-radius: 4px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                                    <span style="font-weight: 600; font-size: 0.95rem;">14:30 - 15:00</span>
+                                    <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-success); padding: 2px 6px; font-size: 0.7rem; border-radius: 4px;">Livraison</span>
+                                </div>
+                                <div style="font-size: 0.9rem; color: var(--text-main);">Ousmane Diallo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendrier Vue Semaine (Mockup CSS) -->
+                <div class="glass-panel" style="display: flex; flex-direction: column; overflow: hidden;">
+                    <!-- Jours de la semaine -->
+                    <div style="display: grid; grid-template-columns: 60px repeat(5, 1fr); border-bottom: 1px solid var(--border-glass); background: rgba(0,0,0,0.2);">
+                        <div style="padding: 1rem; text-align: center; border-right: 1px solid var(--border-glass); color: var(--text-muted); font-size: 0.8rem;">Heure</div>
+                        <div style="padding: 1rem; text-align: center; border-right: 1px solid var(--border-glass);">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Lun</div>
+                            <div style="font-weight: 600; font-size: 1.1rem; margin-top: 0.25rem;">22</div>
+                        </div>
+                        <div style="padding: 1rem; text-align: center; border-right: 1px solid var(--border-glass); background: rgba(59, 130, 246, 0.1);">
+                            <div style="font-size: 0.8rem; color: var(--accent-secondary); font-weight: bold;">Mar</div>
+                            <div style="font-weight: bold; font-size: 1.1rem; margin-top: 0.25rem; color: var(--accent-secondary);">23</div>
+                        </div>
+                        <div style="padding: 1rem; text-align: center; border-right: 1px solid var(--border-glass);">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Mer</div>
+                            <div style="font-weight: 600; font-size: 1.1rem; margin-top: 0.25rem;">24</div>
+                        </div>
+                        <div style="padding: 1rem; text-align: center; border-right: 1px solid var(--border-glass);">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Jeu</div>
+                            <div style="font-weight: 600; font-size: 1.1rem; margin-top: 0.25rem;">25</div>
+                        </div>
+                        <div style="padding: 1rem; text-align: center;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Ven</div>
+                            <div style="font-weight: 600; font-size: 1.1rem; margin-top: 0.25rem;">26</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Grille des heures -->
+                    <div style="flex-grow: 1; overflow-y: auto; position: relative;">
+                        <div style="display: grid; grid-template-columns: 60px repeat(5, 1fr); position: absolute; width: 100%; height: 600px;">
+                            <!-- Lignes de fond (Heures) -->
+                            <div style="grid-column: 1 / -1; display: grid; grid-template-rows: repeat(10, 60px);">
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">09:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">10:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">11:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">12:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">13:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">14:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">15:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">16:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">17:00</div>
+                                <div style="border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: flex-start; padding-top: 5px; justify-content: center; color: var(--text-muted); font-size: 0.75rem; border-right: 1px solid var(--border-glass);">18:00</div>
+                            </div>
+
+                            <!-- Lignes verticales colonnes -->
+                            <div style="grid-column: 2; border-right: 1px solid rgba(255,255,255,0.03); grid-row: 1 / 2; height: 600px;"></div>
+                            <div style="grid-column: 3; border-right: 1px solid rgba(255,255,255,0.03); grid-row: 1 / 2; height: 600px; background: rgba(59, 130, 246, 0.02);"></div>
+                            <div style="grid-column: 4; border-right: 1px solid rgba(255,255,255,0.03); grid-row: 1 / 2; height: 600px;"></div>
+                            <div style="grid-column: 5; border-right: 1px solid rgba(255,255,255,0.03); grid-row: 1 / 2; height: 600px;"></div>
+                            <div style="grid-column: 6; border-right: 1px solid rgba(255,255,255,0.03); grid-row: 1 / 2; height: 600px;"></div>
+
+                            <!-- Blocs de RDV -->
+                            <div style="grid-column: 3; position: absolute; top: 60px; left: 5px; right: 5px; height: 50px; background: rgba(139, 92, 246, 0.2); border-left: 4px solid var(--accent-primary); border-radius: 4px; padding: 0.5rem; overflow: hidden; display:flex; flex-direction:column; justify-content:center;">
+                                <span style="font-weight: 600; font-size: 0.8rem; color: white;">Fatou Ndiaye</span>
+                                <span style="font-size: 0.7rem; color: var(--accent-primary);">Examen</span>
+                            </div>
+
+                            <div style="grid-column: 3; position: absolute; top: 330px; left: 5px; right: 5px; height: 50px; background: rgba(16, 185, 129, 0.2); border-left: 4px solid var(--accent-success); border-radius: 4px; padding: 0.5rem; overflow: hidden; display:flex; flex-direction:column; justify-content:center;">
+                                <span style="font-weight: 600; font-size: 0.8rem; color: white;">Ousmane Diallo</span>
+                                <span style="font-size: 0.7rem; color: var(--accent-success);">Livraison</span>
+                            </div>
+
+                            <div style="grid-column: 4; position: absolute; top: 120px; left: 5px; right: 5px; height: 50px; background: rgba(59, 130, 246, 0.2); border-left: 4px solid var(--accent-secondary); border-radius: 4px; padding: 0.5rem; overflow: hidden; display:flex; flex-direction:column; justify-content:center;">
+                                <span style="font-weight: 600; font-size: 0.8rem; color: white;">Mamadou Ba</span>
+                                <span style="font-size: 0.7rem; color: var(--accent-secondary);">Choix Monture</span>
+                            </div>
+
+                            <!-- Ligne de l'heure actuelle -->
+                            <div style="grid-column: 1 / -1; position: absolute; top: 140px; left: 0; width: 100%; height: 2px; background: var(--accent-danger); z-index: 10;">
+                                <div style="position: absolute; left: 54px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-danger);"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

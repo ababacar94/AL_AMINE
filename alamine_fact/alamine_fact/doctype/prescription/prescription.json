@@ -1,0 +1,113 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:PRES-{####}",
+ "creation": "2026-06-22 10:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "client",
+  "date_prescription",
+  "mesures_oeil_droit_section",
+  "od_sphere",
+  "od_cylindre",
+  "od_axe",
+  "od_addition",
+  "mesures_oeil_gauche_section",
+  "og_sphere",
+  "og_cylindre",
+  "og_axe",
+  "og_addition"
+ ],
+ "fields": [
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Client",
+   "options": "Client",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_prescription",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date de la Prescription",
+   "reqd": 1
+  },
+  {
+   "fieldname": "mesures_oeil_droit_section",
+   "fieldtype": "Section Break",
+   "label": "Mesures \u0152il Droit (OD)"
+  },
+  {
+   "fieldname": "od_sphere",
+   "fieldtype": "Float",
+   "label": "Sph\u00e8re (OD)"
+  },
+  {
+   "fieldname": "od_cylindre",
+   "fieldtype": "Float",
+   "label": "Cylindre (OD)"
+  },
+  {
+   "fieldname": "od_axe",
+   "fieldtype": "Float",
+   "label": "Axe (OD)"
+  },
+  {
+   "fieldname": "od_addition",
+   "fieldtype": "Float",
+   "label": "Addition (OD)"
+  },
+  {
+   "fieldname": "mesures_oeil_gauche_section",
+   "fieldtype": "Section Break",
+   "label": "Mesures \u0152il Gauche (OG)"
+  },
+  {
+   "fieldname": "og_sphere",
+   "fieldtype": "Float",
+   "label": "Sph\u00e8re (OG)"
+  },
+  {
+   "fieldname": "og_cylindre",
+   "fieldtype": "Float",
+   "label": "Cylindre (OG)"
+  },
+  {
+   "fieldname": "og_axe",
+   "fieldtype": "Float",
+   "label": "Axe (OG)"
+  },
+  {
+   "fieldname": "og_addition",
+   "fieldtype": "Float",
+   "label": "Addition (OG)"
+  }
+ ],
+ "modified": "2026-06-22 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Alamine Fact",
+ "name": "Prescription",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
