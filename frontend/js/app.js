@@ -437,62 +437,143 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==================== NOUVELLE VENTE ====================
+    // ==================== POINT DE VENTE (POS) ====================
     async function renderNouvelleVente() {
         const clients = await db.getClients();
         const nextNum = await db.getNextFactureNumero('facture');
+        const products = await db.getStock();
+        let cart = [];
 
         viewContainer.innerHTML = `
         <div class="sales-view animate-fade-in">
-            <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+            <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
                 <div>
-                    <h2 style="font-size:1.5rem; font-weight:600; color:var(--text-main);">Nouvelle Vente</h2>
-                    <p style="color:var(--text-muted); font-size:0.9rem;">Créer une facture ou un devis</p>
+                    <h2 style="font-size:1.5rem; font-weight:600; color:var(--text-main);">Point de Vente (POS)</h2>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Enregistrez rapidement les articles vendus et encaissez le paiement.</p>
                 </div>
             </header>
-            <form id="form-new-sale" class="glass-panel p-4">
-                <div class="form-grid" style="margin-bottom:1.5rem;">
-                    <div class="input-group">
-                        <label>N° Document</label>
-                        <input type="text" name="numero" value="${nextNum}" required>
+            
+            <form id="form-new-sale" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.5rem; min-height: 550px; align-items: stretch;">
+                <!-- GAUCHE : Détails de la vente & Panier -->
+                <div class="glass-panel p-4" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <h3 style="margin-bottom: 1.2rem; color: var(--accent-primary); border-bottom: 1px solid var(--border-glass); padding-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i data-lucide="shopping-bag" style="width: 20px;"></i> Panier d'Achat
+                        </h3>
+                        
+                        <!-- Informations document -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem;">
+                            <div class="input-group">
+                                <label style="font-size: 0.8rem; margin-bottom: 0.3rem;">Type Document</label>
+                                <select name="type_doc" style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px;">
+                                    <option value="facture">Facture</option>
+                                    <option value="devis">Devis</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label style="font-size: 0.8rem; margin-bottom: 0.3rem;">N° Document</label>
+                                <input type="text" name="numero" value="${nextNum}" required style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px;">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.2rem;">
+                            <div class="input-group">
+                                <label style="font-size: 0.8rem; margin-bottom: 0.3rem;">Client *</label>
+                                <select name="client_id" required style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; width: 100%;">
+                                    <option value="">— Sélectionner un client —</option>
+                                    ${clients.map(c => `<option value="${c.id}">${c.prenom || ''} ${c.nom}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Tableau du Panier -->
+                        <div style="max-height: 220px; overflow-y: auto; border: 1px solid var(--border-glass); border-radius: 8px; background: rgba(0,0,0,0.2); margin-bottom: 1rem;">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid var(--border-glass); background: rgba(255,255,255,0.02); position: sticky; top: 0;">
+                                        <th style="padding: 0.6rem; color: var(--text-muted);">Article</th>
+                                        <th style="padding: 0.6rem; color: var(--text-muted); text-align: center; width: 70px;">Qté</th>
+                                        <th style="padding: 0.6rem; color: var(--text-muted); text-align: right; width: 90px;">PU (FCFA)</th>
+                                        <th style="padding: 0.6rem; color: var(--text-muted); text-align: right; width: 95px;">Total</th>
+                                        <th style="padding: 0.6rem; width: 35px; text-align: center;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart-tbody">
+                                    <tr>
+                                        <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">Votre panier est vide. Cliquez sur un produit à droite pour l'ajouter.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label>Client *</label>
-                        <select name="client_id" required>
-                            <option value="">— Sélectionner —</option>
-                            ${clients.map(c => `<option value="${c.id}">${c.prenom || ''} ${c.nom}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Date</label>
-                        <input type="date" name="date_facture" value="${new Date().toISOString().split('T')[0]}">
-                    </div>
-                    <div class="input-group">
-                        <label>Type</label>
-                        <select name="type_doc">
-                            <option value="facture">Facture</option>
-                            <option value="devis">Devis</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label>Total (FCFA) *</label>
-                        <input type="number" name="total" min="0" required placeholder="0">
-                    </div>
-                    <div class="input-group">
-                        <label>Montant Payé (FCFA)</label>
-                        <input type="number" name="montant_paye" min="0" value="0" placeholder="0">
-                    </div>
-                    <div class="input-group">
-                        <label>Statut</label>
-                        <select name="statut">
-                            <option value="Impayé">Impayé</option>
-                            <option value="Acompte">Acompte</option>
-                            <option value="Payé">Payé</option>
-                            <option value="Devis">Devis</option>
-                        </select>
+
+                    <!-- Totaux & Encaissement -->
+                    <div style="border-top: 1px solid var(--border-glass); padding-top: 1rem; margin-top: auto;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                            <div class="input-group">
+                                <label style="font-size: 0.8rem; margin-bottom: 0.3rem;">Mode de paiement</label>
+                                <select name="mode_paiement" style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px;">
+                                    <option value="Espèces">Espèces</option>
+                                    <option value="Wave">Wave</option>
+                                    <option value="Orange Money">Orange Money</option>
+                                    <option value="Carte Bancaire">Carte Bancaire</option>
+                                    <option value="Chèque">Chèque</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label style="font-size: 0.8rem; margin-bottom: 0.3rem;">Statut de facturation</label>
+                                <select name="statut" style="padding: 0.5rem; font-size: 0.85rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px;">
+                                    <option value="Payé">Payé</option>
+                                    <option value="Acompte">Acompte</option>
+                                    <option value="Impayé">Impayé</option>
+                                    <option value="Devis">Devis</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1.1fr; gap: 1rem; margin-bottom: 1.2rem; align-items: end;">
+                            <div class="input-group">
+                                <label style="font-size: 0.8rem; margin-bottom: 0.3rem;">Montant reçu (FCFA)</label>
+                                <input type="number" name="montant_paye" min="0" value="0" placeholder="0" style="padding: 0.6rem; font-size: 0.9rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px;">
+                            </div>
+                            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-secondary); border-radius: 6px; padding: 0.5rem 0.75rem; display: flex; flex-direction: column; justify-content: center; align-items: flex-end;">
+                                <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Total à payer</span>
+                                <span id="pos-total-display" style="font-size: 1.4rem; font-weight: 700; color: var(--accent-secondary);">0 FCFA</span>
+                                <input type="hidden" name="total" value="0">
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="date_facture" value="${new Date().toISOString().split('T')[0]}">
+                        <button type="submit" class="btn-submit" style="width:100%; padding: 0.8rem; font-weight: 600; font-size: 1rem;">💾 Enregistrer la vente</button>
                     </div>
                 </div>
-                <button type="submit" class="btn-submit" style="width:100%;">💾 Enregistrer la vente</button>
+
+                <!-- DROITE : Catalogue de produits -->
+                <div class="glass-panel p-4" style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;">
+                    <h3 style="margin-bottom: 1rem; color: var(--accent-success); border-bottom: 1px solid var(--border-glass); padding-bottom: 0.5rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="package" style="width: 20px;"></i> Articles en Stock
+                    </h3>
+                    
+                    <!-- Recherche & Filtre Categorie -->
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.2rem;">
+                        <div class="global-search" style="flex-grow: 1; min-width: auto; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); display: flex; align-items: center; padding: 0.5rem 0.75rem;">
+                            <i data-lucide="search" style="width: 16px; margin-right: 0.4rem;"></i>
+                            <input type="text" id="pos-search-input" placeholder="Rechercher un produit..." style="background: transparent; border: none; color: white; outline: none; padding: 0; font-size: 0.85rem; width: 100%;">
+                        </div>
+                        <select id="pos-category-select" style="padding: 0.5rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); border-radius: 6px; color: var(--text-main); outline: none; font-size: 0.85rem;">
+                            <option value="all">Toutes catégories</option>
+                            <option value="Montures">Montures</option>
+                            <option value="Verres">Verres</option>
+                            <option value="Lentilles">Lentilles</option>
+                            <option value="Accessoires">Accessoires</option>
+                        </select>
+                    </div>
+
+                    <!-- Grille des produits -->
+                    <div id="pos-products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; overflow-y: auto; flex-grow: 1; max-height: 400px; padding-right: 0.2rem;">
+                        <!-- Les produits s'afficheront ici -->
+                    </div>
+                </div>
             </form>
         </div>`;
 
@@ -500,9 +581,170 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectTypeDoc = formNewSale.querySelector('[name="type_doc"]');
         const inputNumero = formNewSale.querySelector('[name="numero"]');
         const selectStatut = formNewSale.querySelector('[name="statut"]');
+        const inputMontantPaye = formNewSale.querySelector('[name="montant_paye"]');
+        const inputTotalHidden = formNewSale.querySelector('[name="total"]');
+        const totalDisplay = document.getElementById('pos-total-display');
+        const cartTbody = document.getElementById('cart-tbody');
+        const searchInput = document.getElementById('pos-search-input');
+        const categorySelect = document.getElementById('pos-category-select');
+        const productsGrid = document.getElementById('pos-products-grid');
 
         lucide.createIcons();
 
+        // Mettre à jour les informations du Panier (totaux, etc.)
+        function updateCartUI() {
+            if (cart.length === 0) {
+                cartTbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">Votre panier est vide. Cliquez sur un produit à droite pour l'ajouter.</td>
+                </tr>`;
+                totalDisplay.innerText = '0 FCFA';
+                inputTotalHidden.value = 0;
+                if (selectStatut.value === 'Payé') {
+                    inputMontantPaye.value = 0;
+                }
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.prix_vente * item.quantite;
+                total += itemTotal;
+                html += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                    <td style="padding: 0.6rem 0.5rem; font-weight: 500;">
+                        ${item.nom}<br>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">${item.categorie}</span>
+                    </td>
+                    <td style="padding: 0.6rem 0.5rem; text-align: center;">
+                        <input type="number" class="cart-qty" data-index="${index}" min="1" max="${item.stock_max}" value="${item.quantite}" style="width: 50px; text-align: center; background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass); border-radius: 4px; color: white; padding: 0.2rem 0; font-size: 0.8rem; outline: none;">
+                    </td>
+                    <td style="padding: 0.6rem 0.5rem; text-align: right; font-family: monospace;">${item.prix_vente}</td>
+                    <td style="padding: 0.6rem 0.5rem; text-align: right; font-family: monospace; font-weight: 600;">${itemTotal}</td>
+                    <td style="padding: 0.6rem 0.5rem; text-align: center;">
+                        <button type="button" class="cart-remove icon-btn" data-index="${index}" style="color: var(--accent-danger); border: none; padding: 0.2rem; cursor: pointer; background: transparent;">
+                            <i data-lucide="trash-2" style="width: 14px;"></i>
+                        </button>
+                    </td>
+                </tr>`;
+            });
+
+            cartTbody.innerHTML = html;
+            totalDisplay.innerText = total + ' FCFA';
+            inputTotalHidden.value = total;
+
+            // Si le statut est "Payé", le montant payé est automatiquement égal au total
+            if (selectStatut.value === 'Payé') {
+                inputMontantPaye.value = total;
+            } else if (selectStatut.value === 'Impayé') {
+                inputMontantPaye.value = 0;
+            }
+
+            lucide.createIcons();
+
+            // Attacher les événements sur la quantité et suppression
+            document.querySelectorAll('.cart-qty').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const index = parseInt(e.target.dataset.index);
+                    let qty = parseInt(e.target.value) || 1;
+                    const maxStock = cart[index].stock_max;
+
+                    if (qty > maxStock) {
+                        qty = maxStock;
+                        e.target.value = maxStock;
+                        showToast(`Quantité limitée au stock disponible (${maxStock})`, 'warning');
+                    }
+                    if (qty < 1) {
+                        qty = 1;
+                        e.target.value = 1;
+                    }
+
+                    cart[index].quantite = qty;
+                    updateCartUI();
+                });
+            });
+
+            document.querySelectorAll('.cart-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const btnEl = e.target.closest('.cart-remove');
+                    const index = parseInt(btnEl.dataset.index);
+                    cart.splice(index, 1);
+                    updateCartUI();
+                });
+            });
+        }
+
+        // Afficher les produits dans le catalogue
+        function renderProductsList() {
+            const query = searchInput.value.toLowerCase().trim();
+            const category = categorySelect.value;
+
+            const filtered = products.filter(p => {
+                const matchesQuery = p.nom.toLowerCase().includes(query) || (p.fournisseurs && p.fournisseurs.nom.toLowerCase().includes(query));
+                const matchesCategory = category === 'all' || p.categorie === category;
+                return matchesQuery && matchesCategory;
+            });
+
+            if (filtered.length === 0) {
+                productsGrid.innerHTML = `<div style="grid-column: 1 / -1; padding: 2rem; text-align: center; color: var(--text-muted);">Aucun article trouvé.</div>`;
+                return;
+            }
+
+            productsGrid.innerHTML = filtered.map(p => {
+                const outOfStock = p.quantite <= 0;
+                return `
+                <div class="pos-product-card" data-id="${p.id}" style="background: rgba(255,255,255,0.02); border: 1px solid ${outOfStock ? 'rgba(239, 68, 68, 0.2)' : 'var(--border-glass)'}; border-radius: 8px; padding: 0.6rem; text-align: center; cursor: ${outOfStock ? 'not-allowed' : 'pointer'}; transition: all 0.2s; opacity: ${outOfStock ? 0.5 : 1};" 
+                     onmouseover="if(!${outOfStock}) this.style.background='rgba(255,255,255,0.05)'; if(!${outOfStock}) this.style.borderColor='var(--accent-primary)';" 
+                     onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='${outOfStock ? 'rgba(239, 68, 68, 0.2)' : 'var(--border-glass)'}';">
+                    <span style="font-size: 0.7rem; background: ${p.categorie === 'Montures' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(16, 185, 129, 0.15)'}; color: ${p.categorie === 'Montures' ? 'var(--accent-secondary)' : 'var(--accent-success)'}; padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: 500; text-transform: uppercase;">${p.categorie}</span>
+                    <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-main); margin: 0.4rem 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${p.nom}">${p.nom}</div>
+                    <div style="font-family: monospace; font-size: 0.85rem; color: var(--accent-secondary); font-weight: bold; margin-bottom: 0.3rem;">${p.prix_vente} FCFA</div>
+                    <div style="font-size: 0.75rem; color: ${p.quantite <= p.seuil_alerte ? 'var(--accent-danger)' : 'var(--text-muted)'};">${p.quantite} dispo(s)</div>
+                </div>`;
+            }).join('');
+
+            // Evénement au clic pour ajouter au panier
+            document.querySelectorAll('.pos-product-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const prodId = card.dataset.id;
+                    const prod = products.find(p => p.id === prodId);
+
+                    if (!prod || prod.quantite <= 0) return;
+
+                    const cartItemIdx = cart.findIndex(item => item.id === prod.id);
+
+                    if (cartItemIdx > -1) {
+                        if (cart[cartItemIdx].quantite < prod.quantite) {
+                            cart[cartItemIdx].quantite += 1;
+                        } else {
+                            showToast('Stock maximal disponible atteint pour cet article', 'warning');
+                        }
+                    } else {
+                        cart.push({
+                            id: prod.id,
+                            nom: prod.nom,
+                            categorie: prod.categorie,
+                            prix_vente: parseFloat(prod.prix_vente),
+                            quantite: 1,
+                            stock_max: prod.quantite
+                        });
+                    }
+
+                    updateCartUI();
+                });
+            });
+        }
+
+        // Init catalogue
+        renderProductsList();
+
+        // Recherche & Filtres catalogue
+        searchInput.addEventListener('input', renderProductsList);
+        categorySelect.addEventListener('change', renderProductsList);
+
+        // Document Type Change
         selectTypeDoc.addEventListener('change', async () => {
             const nextNum = await db.getNextFactureNumero(selectTypeDoc.value);
             inputNumero.value = nextNum;
@@ -511,14 +753,44 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (selectStatut.value === 'Devis') {
                 selectStatut.value = 'Impayé';
             }
+            updateCartUI();
         });
 
+        // Statut change
+        selectStatut.addEventListener('change', () => {
+            const totalVal = parseFloat(inputTotalHidden.value) || 0;
+            if (selectStatut.value === 'Payé') {
+                inputMontantPaye.value = totalVal;
+            } else if (selectStatut.value === 'Impayé' || selectStatut.value === 'Devis') {
+                inputMontantPaye.value = 0;
+            }
+        });
+
+        // Submit Sale
         formNewSale.addEventListener('submit', async (e) => {
             e.preventDefault();
             const fd = new FormData(e.target);
             const data = Object.fromEntries(fd.entries());
+            
+            // Format sold items
+            data.produits = cart.map(item => ({
+                id: item.id,
+                nom: item.nom,
+                quantite: item.quantite,
+                prix: item.prix_vente
+            }));
+
             try {
+                // Add to DB
                 await db.addFacture(data);
+
+                // Update stock quantities for each sold product
+                const updatePromises = cart.map(item => {
+                    const newQty = item.stock_max - item.quantite;
+                    return db.updateProduit(item.id, { quantite: newQty });
+                });
+                await Promise.all(updatePromises);
+
                 showToast('Vente enregistrée avec succès !');
                 navItems.forEach(n => n.classList.remove('active'));
                 document.querySelector('[data-view="invoices"]').classList.add('active');

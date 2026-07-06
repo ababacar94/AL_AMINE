@@ -71,6 +71,8 @@ CREATE TABLE IF NOT EXISTS factures (
     montant_paye NUMERIC(12,2) DEFAULT 0,
     statut VARCHAR(20) DEFAULT 'Impayé' CHECK (statut IN ('Payé', 'Acompte', 'Impayé', 'Devis')),
     type_doc VARCHAR(20) DEFAULT 'facture' CHECK (type_doc IN ('facture', 'devis')),
+    mode_paiement VARCHAR(50) DEFAULT 'Espèces',
+    produits JSONB DEFAULT '[]'::jsonb,
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
