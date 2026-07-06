@@ -61,10 +61,22 @@ const db = {
 
     async getNextFactureNumero(type = 'facture') {
         const prefix = type === 'devis' ? 'DEV' : 'FACT';
-        const { data } = await supabase.from('factures').select('numero').eq('type_doc', type).order('created_at', { ascending: false }).limit(1);
+        const { data, error } = await supabase.from('factures').select('numero');
+        if (error) { console.error('Erreur getNextFactureNumero:', error); return `${prefix}-26001`; }
         if (data && data.length > 0) {
-            const lastNum = parseInt(data[0].numero.split('-')[1]) || 0;
-            return `${prefix}-${String(lastNum + 1).padStart(5, '0')}`;
+            let maxNum = 0;
+            data.forEach(f => {
+                const parts = f.numero.split('-');
+                if (parts.length > 1) {
+                    const num = parseInt(parts[1]);
+                    if (!isNaN(num) && num > maxNum) {
+                        maxNum = num;
+                    }
+                }
+            });
+            if (maxNum > 0) {
+                return `${prefix}-${String(maxNum + 1).padStart(5, '0')}`;
+            }
         }
         return `${prefix}-26001`;
     },

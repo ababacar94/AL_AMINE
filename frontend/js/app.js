@@ -496,9 +496,24 @@ document.addEventListener('DOMContentLoaded', () => {
             </form>
         </div>`;
 
+        const formNewSale = document.getElementById('form-new-sale');
+        const selectTypeDoc = formNewSale.querySelector('[name="type_doc"]');
+        const inputNumero = formNewSale.querySelector('[name="numero"]');
+        const selectStatut = formNewSale.querySelector('[name="statut"]');
+
         lucide.createIcons();
 
-        document.getElementById('form-new-sale').addEventListener('submit', async (e) => {
+        selectTypeDoc.addEventListener('change', async () => {
+            const nextNum = await db.getNextFactureNumero(selectTypeDoc.value);
+            inputNumero.value = nextNum;
+            if (selectTypeDoc.value === 'devis') {
+                selectStatut.value = 'Devis';
+            } else if (selectStatut.value === 'Devis') {
+                selectStatut.value = 'Impayé';
+            }
+        });
+
+        formNewSale.addEventListener('submit', async (e) => {
             e.preventDefault();
             const fd = new FormData(e.target);
             const data = Object.fromEntries(fd.entries());
