@@ -571,21 +571,40 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="input-group"><label>Date</label><input type="date" name="date_prescription" value="${new Date().toISOString().split('T')[0]}"></div>
                     <div class="input-group"><label>Écart Pupillaire</label><input type="text" name="ecart_pupillaire" placeholder="62mm"></div>
                 </div>
-                <h4 style="margin:1.5rem 0 0.75rem; color:var(--accent-secondary);">👁 Œil Droit (OD)</h4>
-                <div class="form-grid">
-                    <div class="input-group"><label>Sphère</label><input type="text" name="od_sphere" placeholder="+0.00"></div>
-                    <div class="input-group"><label>Cylindre</label><input type="text" name="od_cylindre" placeholder="-0.00"></div>
-                    <div class="input-group"><label>Axe</label><input type="text" name="od_axe" placeholder="180°"></div>
-                    <div class="input-group"><label>Addition</label><input type="text" name="od_addition" placeholder="+2.00"></div>
+                <div style="margin-top: 1.5rem; overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; color: var(--text-main); min-width: 500px;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-glass); text-align: center;">
+                                <th style="padding: 0.75rem 0.5rem; font-weight: 500; font-size: 0.85rem; text-align: left; color: var(--text-muted); width: 140px;">Œil</th>
+                                <th style="padding: 0.75rem 0.5rem; font-weight: 500; font-size: 0.85rem; color: var(--text-muted);">Sphère (SPH)</th>
+                                <th style="padding: 0.75rem 0.5rem; font-weight: 500; font-size: 0.85rem; color: var(--text-muted);">Cylindre (CYL)</th>
+                                <th style="padding: 0.75rem 0.5rem; font-weight: 500; font-size: 0.85rem; color: var(--text-muted);">Axe (AXE)</th>
+                                <th style="padding: 0.75rem 0.5rem; font-weight: 500; font-size: 0.85rem; color: var(--text-muted);">Addition (ADD)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td style="padding: 0.75rem 0.5rem; color: var(--accent-secondary); font-weight: 600; font-size: 0.9rem;">
+                                    👁 Œil Droit (OD)
+                                </td>
+                                <td style="padding: 0.5rem;"><input type="text" name="od_sphere" placeholder="+0.00" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                                <td style="padding: 0.5rem;"><input type="text" name="od_cylindre" placeholder="-0.00" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                                <td style="padding: 0.5rem;"><input type="text" name="od_axe" placeholder="180°" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                                <td style="padding: 0.5rem;"><input type="text" name="od_addition" placeholder="+2.00" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <td style="padding: 0.75rem 0.5rem; color: var(--accent-success); font-weight: 600; font-size: 0.9rem;">
+                                    👁 Œil Gauche (OG)
+                                </td>
+                                <td style="padding: 0.5rem;"><input type="text" name="og_sphere" placeholder="+0.00" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                                <td style="padding: 0.5rem;"><input type="text" name="og_cylindre" placeholder="-0.00" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                                <td style="padding: 0.5rem;"><input type="text" name="og_axe" placeholder="180°" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                                <td style="padding: 0.5rem;"><input type="text" name="og_addition" placeholder="+2.00" style="width: 100%; padding: 0.6rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); color: white; border-radius: 6px; text-align: center; outline: none; font-size: 0.9rem;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <h4 style="margin:1.5rem 0 0.75rem; color:var(--accent-success);">👁 Œil Gauche (OG)</h4>
-                <div class="form-grid">
-                    <div class="input-group"><label>Sphère</label><input type="text" name="og_sphere" placeholder="+0.00"></div>
-                    <div class="input-group"><label>Cylindre</label><input type="text" name="og_cylindre" placeholder="-0.00"></div>
-                    <div class="input-group"><label>Axe</label><input type="text" name="og_axe" placeholder="180°"></div>
-                    <div class="input-group"><label>Addition</label><input type="text" name="og_addition" placeholder="+2.00"></div>
-                </div>
-                <div class="input-group" style="margin-top:1rem;"><label>Observations</label><input type="text" name="observations" placeholder="Verres progressifs, antireflet..."></div>
+                <div class="input-group" style="margin-top:1.5rem;"><label>Observations</label><input type="text" name="observations" placeholder="Verres progressifs, antireflet..."></div>
             `, async (data) => {
                 await db.addPrescription(data);
                 showToast('Prescription enregistrée');
